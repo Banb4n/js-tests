@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "es2017",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "noEmitOnError": false,
+    "noEmit": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "module": "es6"
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
