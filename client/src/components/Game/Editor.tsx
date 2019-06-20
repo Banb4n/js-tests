@@ -7,6 +7,17 @@ console.log({ brace });
 
 export function Editor(props: { level: object }) {
     const { level } = props;
+    const [value, setValue] = React.useState(`function ${level.name}(i) {
+        // ${level.description}
+        return i;
+    }`);
+
+    const onChange = (currentValue: string) => {
+        console.log('onChange', {
+            value: currentValue.replace(/\n|\r/g, '').replace(` `, '')
+        });
+        setValue(currentValue);
+    };
 
     return (
         <>
@@ -15,8 +26,7 @@ export function Editor(props: { level: object }) {
                 mode="javascript"
                 theme="monokai"
                 name="editor"
-                onLoad={() => console.log('onLoad')}
-                onChange={() => console.log('onChange')}
+                onChange={value => onChange(value)}
                 fontSize={18}
                 width="60%"
                 height="100%"
@@ -24,10 +34,7 @@ export function Editor(props: { level: object }) {
                 showGutter={true}
                 highlightActiveLine={true}
                 wrapEnabled={true}
-                value={`function ${level.name}(i) {
-    // ${level.description}
-    return i;
-}`}
+                value={value}
                 setOptions={{
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true,
