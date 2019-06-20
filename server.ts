@@ -1,5 +1,5 @@
-import express from 'express';
-import Bundler from 'parcel-bundler';
+const express = require('express');
+const Bundler = require('parcel-bundler');
 
 const bundler = new Bundler('./client/src/index.html');
 const app = express();
