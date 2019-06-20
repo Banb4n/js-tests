@@ -5,12 +5,19 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 console.log({ brace });
 
-export function Editor(props: { level: object }) {
-    const { level } = props;
-    const [value, setValue] = React.useState(`function ${level.name}(i) {
-        // ${level.description}
-        return i;
-    }`);
+export function Editor(props: {
+    level: object;
+    setValue: (value: string) => void;
+    value: string;
+}) {
+    const { level, setValue, value } = props;
+
+    React.useEffect(() => {
+        setValue(`function ${level.name}(i) {
+            // ${level.description}
+            return i;
+        }`);
+    }, []);
 
     const onChange = (currentValue: string) => {
         console.log('onChange', {

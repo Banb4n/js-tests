@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import useAPI from '../../hooks/useAPI';
 import { css } from '../styleguide';
 
+import console = require('console');
 import { Console } from './Console';
 import { Editor } from './Editor';
 
@@ -72,6 +73,8 @@ export function Layout() {
     const [countLevel, setCountLevel] = React.useState(0);
     const fetchData = useAPI();
 
+    const [value, setValue] = React.useState('');
+
     React.useEffect(() => {
         async function fetchLevels() {
             const data = await fetchData('levels');
@@ -96,6 +99,18 @@ export function Layout() {
         }
     }, [levels]);
 
+    const onRunTests = () => {
+        console.log('run');
+
+        if (currentTests) {
+            currentTests.tests.map(test => {
+                console.log({ test, value });
+                const result = eval(value);
+                console.log({ result });
+            });
+        }
+    };
+
     if (!currentLevel || !currentTests) {
         return <p>Wait for fetching</p>;
     }
@@ -103,24 +118,24 @@ export function Layout() {
     return (
         <Main>
             <ActionsWrapper>
-                <RunButton onClick={() => console.log('run')}>
-                    Run (Cmd + e)
-                </RunButton>
+                <RunButton onClick={onRunTests}>Run (Cmd + e)</RunButton>
                 <CountWrapper>{countLevel + 1} / 5</CountWrapper>
                 <TimerWrapper>
                     <Timer>
                         <Timer.Hours />
-                        <Timer.Minutes formatValue={value => `${value} : `} />
+                        <Timer.Minutes formatValue={t => `${t} : `} />
                         <Timer.Seconds
-                            formatValue={value =>
-                                value < 10 ? `0${value}` : `${value}`
-                            }
+                            formatValue={t => (t < 10 ? `0${t}` : `${t}`)}
                         />
                     </Timer>
                 </TimerWrapper>
             </ActionsWrapper>
             <GameWrapper>
-                <Editor level={currentLevel} />
+                <Editor
+                    level={currentLevel}
+                    setValue={setValue}
+                    value={value}
+                />
                 <Console values={currentTests.tests} />
             </GameWrapper>
         </Main>
