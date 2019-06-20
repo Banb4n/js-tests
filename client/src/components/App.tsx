@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Game } from './Game';
+import Game from './Game';
 import { css } from './styleguide';
 
 const Main = styled.section`

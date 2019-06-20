@@ -3,37 +3,15 @@ import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 import * as React from 'react';
 import AceEditor from 'react-ace';
-import styled from 'styled-components';
-import { css } from './styleguide';
+console.log({ brace });
 
-const Wrapper = styled.section`
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    height: 100%;
-`;
-
-const Console = styled.div`
-    flex: 1;
-    background-color: ${css.colors.GRAY};
-    padding: ${css.spacing.S200};
-    width: 40%;
-`;
-
-export function Game() {
-    console.log({ brace });
-    const levels = [
-        {
-            name: 'level name',
-            description: 'level description'
-        }
-    ];
-    const currentLevel = 0;
+export function Editor(props: { level: object }) {
+    const { level } = props;
 
     return (
-        <Wrapper>
+        <>
             <AceEditor
-                placeholder={`function ${levels[currentLevel].name}`}
+                placeholder={`function ${level.name}`}
                 mode="javascript"
                 theme="monokai"
                 name="editor"
@@ -41,12 +19,13 @@ export function Game() {
                 onChange={() => console.log('onChange')}
                 fontSize={18}
                 width="60%"
+                height="100%"
                 showPrintMargin={true}
                 showGutter={true}
                 highlightActiveLine={true}
                 wrapEnabled={true}
-                value={`function ${levels[currentLevel].name}(i) {
-    // ${levels[currentLevel].description}
+                value={`function ${level.name}(i) {
+    // ${level.description}
     return i;
 }`}
                 setOptions={{
@@ -57,7 +36,6 @@ export function Game() {
                     tabSize: 4
                 }}
             />
-            <Console />
-        </Wrapper>
+        </>
     );
 }
