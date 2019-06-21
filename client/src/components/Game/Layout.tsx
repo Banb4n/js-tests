@@ -65,8 +65,8 @@ const RunButton = styled.button`
     height: 50px;
 `;
 
-export function Layout() {
-    const values = ['test', 'test', 'test'];
+export function Layout(props: { onFinishGame: (value: boolean) => void }) {
+    const { onFinishGame } = props;
     const [levels, setLevels] = React.useState(null);
     const [currentLevel, setCurrentLevel] = React.useState(null);
     const [currentTests, setCurrentTests] = React.useState(null);
@@ -75,14 +75,18 @@ export function Layout() {
 
     const [value, setValue] = React.useState('');
 
+    // Hook to fetch * levels
     React.useEffect(() => {
         async function fetchLevels() {
             const data = await fetchData('levels');
             setLevels(data);
         }
-        fetchLevels();
+        if (!levels) {
+            fetchLevels();
+        }
     }, []);
 
+    // Hook to fetch currents level's tests
     React.useEffect(() => {
         async function fetchTests() {
             const data = await fetchData(`levels/${currentLevel.id}/tests`);
@@ -93,11 +97,19 @@ export function Layout() {
         }
     }, [currentLevel]);
 
+    // Hook trigger when the game is finished
     React.useEffect(() => {
-        if (!currentLevel && levels) {
+        if (levels && countLevel + 1 > levels.length) {
+            onFinishGame(true);
+        }
+    }, [countLevel]);
+
+    // useEffect to set the current level
+    React.useEffect(() => {
+        if (levels) {
             setCurrentLevel(levels[countLevel]);
         }
-    }, [levels]);
+    }, [levels, countLevel]);
 
     const onRunTests = () => {
         console.log('run');
@@ -119,10 +131,10 @@ export function Layout() {
         <Main>
             <ActionsWrapper>
                 <RunButton onClick={onRunTests}>Run (Cmd + e)</RunButton>
+                <button onClick={() => setCountLevel(countLevel + 1)}>+</button>
                 <CountWrapper>{countLevel + 1} / 5</CountWrapper>
                 <TimerWrapper>
                     <Timer>
-                        <Timer.Hours />
                         <Timer.Minutes formatValue={t => `${t} : `} />
                         <Timer.Seconds
                             formatValue={t => (t < 10 ? `0${t}` : `${t}`)}

@@ -17,7 +17,7 @@ export function Editor(props: {
             // ${level.description}
             return i;
         }`);
-    }, []);
+    }, [level]);
 
     const onChange = (currentValue: string) => {
         console.log('onChange', {

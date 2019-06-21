@@ -34,6 +34,7 @@ const StartButton = styled.button`
 
 export function App() {
     const [isPlaying, setIsPlaying] = React.useState(false);
+    const [gameIsFinish, setGameFinish] = React.useState(false);
 
     const onClick = () => {
         console.log({ isPlaying: !isPlaying });
@@ -45,10 +46,16 @@ export function App() {
             <Header>
                 <h1>You can't Javascript under pressure</h1>
             </Header>
-            {!isPlaying ? (
-                <StartButton onClick={onClick}>Let's go!</StartButton>
+            {!gameIsFinish ? (
+                !isPlaying ? (
+                    <StartButton onClick={onClick}>Let's go!</StartButton>
+                ) : (
+                    <Game onFinishGame={setGameFinish} />
+                )
             ) : (
-                <Game />
+                <div>
+                    Congratulation, you can Javascript under pressure 👏🚀
+                </div>
             )}
         </Main>
     );
