@@ -14,9 +14,9 @@ export function Editor(props: {
 
     React.useEffect(() => {
         setValue(`function ${level.name}(i) {
-            // ${level.description}
-            return i;
-        }`);
+    // ${level.description}
+    return i;
+}`);
     }, [level]);
 
     const onChange = (currentValue: string) => {

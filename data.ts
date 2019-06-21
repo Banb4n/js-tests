@@ -28,7 +28,7 @@ const LEVELS: Level[] = [
         id: 'level3',
         name: 'getFileExtension',
         description:
-            'i will be a string, but it may not have a file extension. // return the file extension (with no period) if it has one, otherwise false'
+            'i will be a string, but it may not have a file extension. \r\n // return the file extension (with no period) if it has one, otherwise false'
     }
 ];
 

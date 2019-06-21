@@ -28,13 +28,27 @@ const Header = styled.div`
 export function Console(props: { values: [] }) {
     const { values } = props;
     console.log({ values });
+
     return (
         <ConsoleWrapper>
             <Header>
                 <p>Output</p>
             </Header>
             {values.map(test => (
-                <p>{test}</p>
+                <p
+                    style={{
+                        color: test.result === test.expected ? 'green' : 'red'
+                    }}
+                >
+                    <span
+                        style={{ color: 'white' }}
+                    >{`i = ${test.value} : `}</span>
+                    {`${
+                        test.result === test.expected
+                            ? `✅ result ${test.result}`
+                            : `❌ expected ${test.expected} but got ${test.result}`
+                    }`}
+                </p>
             ))}
         </ConsoleWrapper>
     );

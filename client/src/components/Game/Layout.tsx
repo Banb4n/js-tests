@@ -6,6 +6,7 @@ import { css } from '../styleguide';
 
 import { Console } from './Console';
 import { Editor } from './Editor';
+import console = require('console');
 
 const GameWrapper = styled.div`
     display: flex;
@@ -71,6 +72,7 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
     const [currentTests, setCurrentTests] = React.useState(null);
     const [countLevel, setCountLevel] = React.useState(0);
     const [currentResults, setCurrentResults] = React.useState([]);
+    const [isWinLevel, setIsWinLevel] = React.useState(false);
     const fetchData = useAPI();
 
     const [value, setValue] = React.useState('');
@@ -108,6 +110,7 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
     React.useEffect(() => {
         if (levels) {
             setCurrentLevel(levels[countLevel]);
+            setIsWinLevel(false);
         }
     }, [levels, countLevel]);
 
@@ -122,31 +125,32 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
                 .replace(`// ${currentLevel.description}`, '');
             // Here we remove the `{` and `}` to only keep the body
             const parsedFunction = sanitizedFunction.slice(2, -1).trim();
+            console.log({ parsedFunction });
             // We defined the function
             const fun = Function('i', parsedFunction);
+            const results = [];
 
             // We run the tests
-            currentTests.tests.map(test => {
+            currentTests.tests.forEach(test => {
                 const result = fun(test.value);
-                setCurrentResults([
-                    ...currentResults,
-                    `i = ${test.value}: ${
-                        result === test.expected
-                            ? 'Success!'
-                            : `Fail! expected: ${test.expected} and got: ${result}`
-                    }
-                `
-                ]);
-                console.log([
-                    ...currentResults,
-                    `i = ${test.value}: ${
-                        result === test.expected
-                            ? 'Success!'
-                            : `Fail! expected: ${test.expected} and got: ${result}`
-                    }
-                `
-                ]);
+                results.push({
+                    value: test.value,
+                    expected: test.expected,
+                    result
+                });
+                setCurrentResults(results);
+                return;
             });
+
+            if (results.length > 0) {
+                const isWin = results.every(
+                    result => result.expected === result.result
+                );
+
+                if (isWin) {
+                    setIsWinLevel(true);
+                }
+            }
         }
     };
 
@@ -158,7 +162,11 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
         <Main>
             <ActionsWrapper>
                 <RunButton onClick={onRunTests}>Run (Cmd + e)</RunButton>
-                <button onClick={() => setCountLevel(countLevel + 1)}>+</button>
+                {isWinLevel && (
+                    <RunButton onClick={() => setCountLevel(countLevel + 1)}>
+                        Next
+                    </RunButton>
+                )}
                 <CountWrapper>{countLevel + 1} / 5</CountWrapper>
                 <TimerWrapper>
                     <Timer>
