@@ -4,7 +4,7 @@ const data = require('./data');
 
 const bundler = new Bundler('./client/src/index.html');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.get('/api/levels', (req, res) => {
     res.status(200).json({ message: 'Hello world', data: data.LEVELS });

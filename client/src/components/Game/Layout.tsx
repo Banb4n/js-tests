@@ -69,7 +69,7 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
     const [levels, setLevels] = React.useState(null);
     const [currentLevel, setCurrentLevel] = React.useState(null);
     const [currentTests, setCurrentTests] = React.useState(null);
-    const [countLevel, setCountLevel] = React.useState(0);
+    const [countLevel, setCountLevel] = React.useState(2);
     const fetchData = useAPI();
 
     const [value, setValue] = React.useState('');
@@ -111,13 +111,23 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
     }, [levels, countLevel]);
 
     const onRunTests = () => {
-        console.log('run');
-
         if (currentTests) {
+            const sanitizedFunction = value
+                .replace(`function ${currentLevel.name}(i)`, '')
+                .replace(/\r/g, '')
+                .replace(/\n/g, '')
+                .replace(/\t/g, '')
+                .replace(`// ${currentLevel.description}`, '');
+            const parsedFunction = sanitizedFunction.slice(2, -1).trim();
+            const fun = Function('i', parsedFunction);
             currentTests.tests.map(test => {
-                console.log({ test, value });
-                const result = eval(value);
-                console.log({ result });
+                const result = fun(test.value);
+                console.log(
+                    `${result} === ${test.expected}: ${
+                        result === test.expected ? 'true' : 'false'
+                    }
+                `
+                );
             });
         }
     };
