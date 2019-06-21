@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import useAPI from '../../hooks/useAPI';
 import { css } from '../styleguide';
 
-import console = require('console');
 import { Console } from './Console';
 import { Editor } from './Editor';
 
