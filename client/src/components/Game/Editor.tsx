@@ -14,17 +14,10 @@ export function Editor(props: {
 
     React.useEffect(() => {
         setValue(`function ${level.name}(i) {
-    // ${level.description}
+    ${level.description}
     return i;
 }`);
     }, [level]);
-
-    const onChange = (currentValue: string) => {
-        console.log('onChange', {
-            value: currentValue.replace(/\n|\r/g, '').replace(` `, '')
-        });
-        setValue(currentValue);
-    };
 
     return (
         <>
@@ -33,8 +26,8 @@ export function Editor(props: {
                 mode="javascript"
                 theme="monokai"
                 name="editor"
-                onChange={value => onChange(value)}
-                fontSize={18}
+                onChange={currentValue => setValue(currentValue)}
+                fontSize={16}
                 width="60%"
                 height="100%"
                 showPrintMargin={true}

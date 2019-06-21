@@ -2,11 +2,10 @@ import * as React from 'react';
 import Timer from 'react-compound-timer';
 import styled from 'styled-components';
 import useAPI from '../../hooks/useAPI';
+import useEvalFunction from '../../hooks/useEvalFunction';
 import { css } from '../styleguide';
-
 import { Console } from './Console';
 import { Editor } from './Editor';
-import console = require('console');
 
 const GameWrapper = styled.div`
     display: flex;
@@ -74,6 +73,7 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
     const [currentResults, setCurrentResults] = React.useState([]);
     const [isWinLevel, setIsWinLevel] = React.useState(false);
     const fetchData = useAPI();
+    const { createFunction } = useEvalFunction();
 
     const [value, setValue] = React.useState('');
 
@@ -116,27 +116,14 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
 
     const onRunTests = () => {
         if (currentTests) {
-            // Here we remove the function definition, the new line and tab and the comments
-            const sanitizedFunction = value
-                .replace(`function ${currentLevel.name}(i)`, '')
-                .replace(/\r/g, '')
-                .replace(/\n/g, '')
-                .replace(/\t/g, '')
-                .replace(`// ${currentLevel.description}`, '');
-            // Here we remove the `{` and `}` to only keep the body
-            const parsedFunction = sanitizedFunction.slice(2, -1).trim();
-            console.log({ parsedFunction });
-            // We defined the function
-            const fun = Function('i', parsedFunction);
+            const fun = createFunction(value, currentLevel);
             const results = [];
 
-            // We run the tests
             currentTests.tests.forEach(test => {
-                const result = fun(test.value);
                 results.push({
                     value: test.value,
                     expected: test.expected,
-                    result
+                    result: fun(test.value)
                 });
                 setCurrentResults(results);
                 return;

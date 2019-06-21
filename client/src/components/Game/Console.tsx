@@ -27,7 +27,6 @@ const Header = styled.div`
 
 export function Console(props: { values: [] }) {
     const { values } = props;
-    console.log({ values });
 
     return (
         <ConsoleWrapper>

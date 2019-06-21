@@ -16,19 +16,19 @@ const LEVELS: Level[] = [
     {
         id: 'level1',
         name: 'doubleInteger',
-        description: 'i will be an integer. Double it and return it.'
+        description: '// i will be an integer. Double it and return it.'
     },
     {
         id: 'level2',
         name: 'isNumberEven',
         description:
-            "i will be an integer. Return true if it's even, and false if it isn't."
+            "// i will be an integer. Return true if it's even, and false if it isn't"
     },
     {
         id: 'level3',
         name: 'getFileExtension',
         description:
-            'i will be a string, but it may not have a file extension. \r\n // return the file extension (with no period) if it has one, otherwise false'
+            '// i will be a string, but it may not have a file extension. \r\n // return the file extension (with no period) if it has one, otherwise false.'
     }
 ];
 
