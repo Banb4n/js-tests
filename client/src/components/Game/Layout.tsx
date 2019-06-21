@@ -69,7 +69,8 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
     const [levels, setLevels] = React.useState(null);
     const [currentLevel, setCurrentLevel] = React.useState(null);
     const [currentTests, setCurrentTests] = React.useState(null);
-    const [countLevel, setCountLevel] = React.useState(2);
+    const [countLevel, setCountLevel] = React.useState(0);
+    const [currentResults, setCurrentResults] = React.useState([]);
     const fetchData = useAPI();
 
     const [value, setValue] = React.useState('');
@@ -112,22 +113,39 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
 
     const onRunTests = () => {
         if (currentTests) {
+            // Here we remove the function definition, the new line and tab and the comments
             const sanitizedFunction = value
                 .replace(`function ${currentLevel.name}(i)`, '')
                 .replace(/\r/g, '')
                 .replace(/\n/g, '')
                 .replace(/\t/g, '')
                 .replace(`// ${currentLevel.description}`, '');
+            // Here we remove the `{` and `}` to only keep the body
             const parsedFunction = sanitizedFunction.slice(2, -1).trim();
+            // We defined the function
             const fun = Function('i', parsedFunction);
+
+            // We run the tests
             currentTests.tests.map(test => {
                 const result = fun(test.value);
-                console.log(
-                    `${result} === ${test.expected}: ${
-                        result === test.expected ? 'true' : 'false'
+                setCurrentResults([
+                    ...currentResults,
+                    `i = ${test.value}: ${
+                        result === test.expected
+                            ? 'Success!'
+                            : `Fail! expected: ${test.expected} and got: ${result}`
                     }
                 `
-                );
+                ]);
+                console.log([
+                    ...currentResults,
+                    `i = ${test.value}: ${
+                        result === test.expected
+                            ? 'Success!'
+                            : `Fail! expected: ${test.expected} and got: ${result}`
+                    }
+                `
+                ]);
             });
         }
     };
@@ -157,7 +175,7 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
                     setValue={setValue}
                     value={value}
                 />
-                <Console values={currentTests.tests} />
+                <Console values={currentResults} />
             </GameWrapper>
         </Main>
     );

@@ -34,15 +34,7 @@ export function Console(props: { values: [] }) {
                 <p>Output</p>
             </Header>
             {values.map(test => (
-                <p>
-                    i: {test.value} | expected:{' '}
-                    {test.expected
-                        ? typeof test.expected === 'boolean'
-                            ? '👍'
-                            : test.expected
-                        : '👎'}{' '}
-                    | result: {test.value > 4 ? '✅' : '❌'}
-                </p>
+                <p>{test}</p>
             ))}
         </ConsoleWrapper>
     );
