@@ -39,15 +39,10 @@ const Header = styled.div`
 export function App() {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [gameIsFinish, setGameFinish] = React.useState(false);
-    const [functions, setFunctions] = React.useState([]);
     const [stats, setStats] = React.useState([]);
 
     const onClick = () => {
         setIsPlaying(!isPlaying);
-    };
-
-    const addFunction = (fun: string) => {
-        setFunctions([...functions, fun]);
     };
 
     const addNewStats = (value: object) => {
@@ -72,11 +67,7 @@ export function App() {
                         Let's go!
                     </button>
                 ) : (
-                    <Game
-                        onFinishGame={setGameFinish}
-                        setFunction={addFunction}
-                        setStats={addNewStats}
-                    />
+                    <Game onFinishGame={setGameFinish} setStats={addNewStats} />
                 )
             ) : (
                 <div>

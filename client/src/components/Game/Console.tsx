@@ -49,7 +49,7 @@ const TrashButton = styled.div`
     }
 `;
 
-export function Console(props: { values: [] }) {
+export function Console(props: { values: any[] }) {
     const { values } = props;
     const [allValues, setAllValues] = React.useState([]);
 

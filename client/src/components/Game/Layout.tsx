@@ -46,15 +46,14 @@ const TimerWrapper = styled.div`
 
 export function Layout(props: {
     onFinishGame: (value: boolean) => void;
-    setFunction: (value: string) => void;
     setStats: (value: object) => void;
 }) {
-    const { onFinishGame, setFunction, setStats } = props;
+    const { onFinishGame, setStats } = props;
     const [value, setValue] = React.useState('');
     const [levels, setLevels] = React.useState(null);
     const [currentLevel, setCurrentLevel] = React.useState(null);
     const [currentTests, setCurrentTests] = React.useState(null);
-    const [countLevel, setCountLevel] = React.useState(0);
+    const [countLevel, setCountLevel] = React.useState(4);
     const [currentResults, setCurrentResults] = React.useState([]);
     const fetchData = useAPI();
 
@@ -87,7 +86,6 @@ export function Layout(props: {
     React.useEffect(() => {
         if (levels) {
             setCurrentLevel(levels[countLevel]);
-            setFunction(value);
         }
     }, [levels, countLevel]);
 
@@ -122,7 +120,8 @@ export function Layout(props: {
                 if (isWin) {
                     setStats({
                         level: currentLevel.name,
-                        time: '00:00'
+                        time: '00:00',
+                        function: value
                     });
                     setCountLevel(countLevel + 1);
                 }
