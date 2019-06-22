@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Timer from 'react-compound-timer';
+import HotKeys from 'react-hot-keys';
 import styled from 'styled-components';
 import useAPI from '../../hooks/useAPI';
-import useEvalFunction from '../../hooks/useEvalFunction';
 import { css } from '../styleguide';
 import { Console } from './Console';
+import createFunction from './createFunction';
 import { Editor } from './Editor';
 
 const GameWrapper = styled.div`
@@ -27,10 +28,9 @@ const ActionsWrapper = styled.div`
     justify-content: space-around;
     align-items: center;
     width: 100%;
-    padding: ${css.spacing.S200};
-    /* background-color: #272822; */
-    padding: ${css.spacing.S200};
-    margin-bottom: ${css.spacing.S300};
+    padding: ${css.spacing.S200}px;
+    padding: ${css.spacing.S200}px;
+    margin-bottom: ${css.spacing.S300}px;
     border-radius: 2px;
     border: 1px solid ${css.colors.WHITE};
 `;
@@ -58,14 +58,18 @@ const RunButton = styled.button`
     border-radius: 2px;
     background-color: ${css.colors.BLUE};
     border-color: ${css.colors.BLUE};
-    padding: ${css.spacing.S200} ${css.spacing.S400};
+    padding: ${css.spacing.S200}px ${css.spacing.S400}px;
     font-size: 1em;
     color: ${css.colors.WHITE};
     height: 50px;
 `;
 
-export function Layout(props: { onFinishGame: (value: boolean) => void }) {
-    const { onFinishGame } = props;
+export function Layout(props: {
+    onFinishGame: (value: boolean) => void;
+    setFunction: (value: string) => void;
+}) {
+    const { onFinishGame, setFunction } = props;
+    const [value, setValue] = React.useState('');
     const [levels, setLevels] = React.useState(null);
     const [currentLevel, setCurrentLevel] = React.useState(null);
     const [currentTests, setCurrentTests] = React.useState(null);
@@ -73,11 +77,7 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
     const [currentResults, setCurrentResults] = React.useState([]);
     const [isWinLevel, setIsWinLevel] = React.useState(false);
     const fetchData = useAPI();
-    const { createFunction } = useEvalFunction();
 
-    const [value, setValue] = React.useState('');
-
-    // Hook to fetch * levels
     React.useEffect(() => {
         async function fetchLevels() {
             const data = await fetchData('levels');
@@ -88,7 +88,6 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
         }
     }, []);
 
-    // Hook to fetch currents level's tests
     React.useEffect(() => {
         async function fetchTests() {
             const data = await fetchData(`levels/${currentLevel.id}/tests`);
@@ -99,23 +98,34 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
         }
     }, [currentLevel]);
 
-    // Hook trigger when the game is finished
     React.useEffect(() => {
         if (levels && countLevel + 1 > levels.length) {
             onFinishGame(true);
         }
     }, [countLevel]);
 
-    // useEffect to set the current level
     React.useEffect(() => {
         if (levels) {
             setCurrentLevel(levels[countLevel]);
             setIsWinLevel(false);
+            setFunction(value);
         }
     }, [levels, countLevel]);
 
     const onRunTests = () => {
+        if (currentResults) {
+            setCurrentResults([]);
+        }
+
         if (currentTests) {
+            /**
+             * DEV_HACK
+             */
+            if (value === 'rendpasfou') {
+                setIsWinLevel(true);
+                return;
+            }
+
             const fun = createFunction(value, currentLevel);
             const results = [];
 
@@ -141,37 +151,46 @@ export function Layout(props: { onFinishGame: (value: boolean) => void }) {
         }
     };
 
+    const onKeyDown = (keyName, e, handle) => {
+        console.log('test:onKeyDown', { keyName, e, handle });
+        onRunTests();
+    };
+
     if (!currentLevel || !currentTests) {
         return <p>Wait for fetching</p>;
     }
 
     return (
-        <Main>
-            <ActionsWrapper>
-                <RunButton onClick={onRunTests}>Run (Cmd + e)</RunButton>
-                {isWinLevel && (
-                    <RunButton onClick={() => setCountLevel(countLevel + 1)}>
-                        Next
-                    </RunButton>
-                )}
-                <CountWrapper>{countLevel + 1} / 5</CountWrapper>
-                <TimerWrapper>
-                    <Timer>
-                        <Timer.Minutes formatValue={t => `${t} : `} />
-                        <Timer.Seconds
-                            formatValue={t => (t < 10 ? `0${t}` : `${t}`)}
-                        />
-                    </Timer>
-                </TimerWrapper>
-            </ActionsWrapper>
-            <GameWrapper>
-                <Editor
-                    level={currentLevel}
-                    setValue={setValue}
-                    value={value}
-                />
-                <Console values={currentResults} />
-            </GameWrapper>
-        </Main>
+        <HotKeys keyName="cmd+e,ctrl+e" onKeyDown={onKeyDown}>
+            <Main>
+                <ActionsWrapper>
+                    <RunButton onClick={onRunTests}>Run (Cmd + e)</RunButton>
+                    {isWinLevel && (
+                        <RunButton
+                            onClick={() => setCountLevel(countLevel + 1)}
+                        >
+                            Next
+                        </RunButton>
+                    )}
+                    <CountWrapper>{countLevel + 1} / 5</CountWrapper>
+                    <TimerWrapper>
+                        <Timer>
+                            <Timer.Minutes formatValue={t => `${t} : `} />
+                            <Timer.Seconds
+                                formatValue={t => (t < 10 ? `0${t}` : `${t}`)}
+                            />
+                        </Timer>
+                    </TimerWrapper>
+                </ActionsWrapper>
+                <GameWrapper>
+                    <Editor
+                        level={currentLevel}
+                        setValue={setValue}
+                        value={value}
+                    />
+                    <Console values={currentResults} />
+                </GameWrapper>
+            </Main>
+        </HotKeys>
     );
 }

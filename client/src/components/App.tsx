@@ -26,35 +26,49 @@ const StartButton = styled.button`
     border-radius: 2px;
     background-color: ${css.colors.BLUE};
     border-color: ${css.colors.BLUE};
-    padding: ${css.spacing.S200} ${css.spacing.S400};
+    padding: ${css.spacing.S200}px ${css.spacing.S400}px;
     font-size: 1.5em;
     color: ${css.colors.WHITE};
-    margin-top: ${css.spacing.S200};
+    margin-top: ${css.spacing.S200}px;
 `;
 
 export function App() {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [gameIsFinish, setGameFinish] = React.useState(false);
+    const [functions, setFunctions] = React.useState([]);
 
     const onClick = () => {
         console.log({ isPlaying: !isPlaying });
         setIsPlaying(!isPlaying);
     };
 
+    const addFunction = (fun: string) => {
+        setFunctions([...functions, fun]);
+    };
+
     return (
         <Main>
             <Header>
-                <h1>You can't Javascript under pressure</h1>
+                <h1>
+                    You {gameIsFinish ? 'can' : "can't"} Javascript under
+                    pressure
+                </h1>
             </Header>
             {!gameIsFinish ? (
                 !isPlaying ? (
                     <StartButton onClick={onClick}>Let's go!</StartButton>
                 ) : (
-                    <Game onFinishGame={setGameFinish} />
+                    <Game
+                        onFinishGame={setGameFinish}
+                        setFunction={addFunction}
+                    />
                 )
             ) : (
                 <div>
                     Congratulation, you can Javascript under pressure 👏🚀
+                    {functions.map(fun => (
+                        <p>{fun}</p>
+                    ))}
                 </div>
             )}
         </Main>
