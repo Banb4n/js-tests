@@ -29,6 +29,17 @@ const LEVELS: Level[] = [
         name: 'getFileExtension',
         description:
             '// i will be a string, but it may not have a file extension. \r\n // return the file extension (with no period) if it has one, otherwise false.'
+    },
+    {
+        id: 'level4',
+        name: 'reverseStr',
+        description:
+            '// i will be a string or not. Return the reversed string if i is a string, else false.'
+    },
+    {
+        id: 'level5',
+        name: 'getLastItem',
+        description: '// i will be a string, an array. Return the last item.'
     }
 ];
 
@@ -105,6 +116,56 @@ const TESTS: LevelTest[] = [
             {
                 value: 'test.py',
                 expected: 'py'
+            }
+        ]
+    },
+    {
+        id: LEVELS[3].id,
+        tests: [
+            {
+                value: 'hello',
+                expected: 'o'
+            },
+            {
+                value: ['d', true, 23],
+                expected: 23
+            },
+            {
+                value: 'Howdy',
+                expected: 'y'
+            },
+            {
+                value: ['a', 'a', 'a', 'b'],
+                expected: 'b'
+            },
+            {
+                value: 'good',
+                expected: 'd'
+            }
+        ]
+    },
+    {
+        id: LEVELS[4].id,
+        tests: [
+            {
+                value: 'hello',
+                expected: 'olleh'
+            },
+            {
+                value: { a: true },
+                expected: false
+            },
+            {
+                value: 'Howdy',
+                expected: 'ydwoH'
+            },
+            {
+                value: 'Greetings from Earth',
+                expected: 'htraE morf sgniteerG'
+            },
+            {
+                value: 25,
+                expected: false
             }
         ]
     }

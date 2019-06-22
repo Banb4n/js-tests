@@ -3,7 +3,13 @@ const colors = {
     DARK_BLUE: '#2B2D42',
     BLUE: '#5B5F97',
     LIGHT_BLUE: '#D8E4FF',
-    WHITE: '#FFFCF9'
+    WHITE: '#FFFCF9',
+
+    CHARCOAL: '#2E4052',
+    SLATE_GRAY: '#6F7D8C',
+    FLAME: '#E4572E',
+    Y_BLUE: '#1F2327',
+    LIGHT: '#E0F2E9'
 };
 
 const spacing = {

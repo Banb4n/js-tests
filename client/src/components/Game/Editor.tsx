@@ -3,13 +3,13 @@ import 'brace/mode/javascript';
 import 'brace/theme/monokai';
 import * as React from 'react';
 import AceEditor from 'react-ace';
-console.log({ brace });
 
 export function Editor(props: {
     level: object;
     setValue: (value: string) => void;
     value: string;
 }) {
+    const _ = brace;
     const { level, setValue, value } = props;
 
     React.useEffect(() => {
@@ -35,10 +35,8 @@ export function Editor(props: {
                 highlightActiveLine={true}
                 wrapEnabled={true}
                 value={value}
+                editorProps={{ $blockScrolling: Infinity }}
                 setOptions={{
-                    enableBasicAutocompletion: true,
-                    enableLiveAutocompletion: true,
-                    enableSnippets: false,
                     showLineNumbers: true,
                     tabSize: 4
                 }}

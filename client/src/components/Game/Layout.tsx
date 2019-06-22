@@ -21,61 +21,41 @@ const Main = styled.section`
     justify-content: center;
     width: 100%;
     height: 100%;
+    padding: ${css.spacing.S100}px;
 `;
 
 const ActionsWrapper = styled.div`
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: ${css.spacing.S200}px;
-    padding: ${css.spacing.S200}px;
     margin-bottom: ${css.spacing.S300}px;
-    border-radius: 2px;
-    border: 1px solid ${css.colors.WHITE};
 `;
 
 const TimerWrapper = styled.div`
-    color: ${css.colors.BLUE};
+    color: ${css.colors.FLAME};
     font-size: 2.5em;
     padding: 10px;
     width: 200px;
     display: flex;
     align-items: center;
     height: 100%;
-`;
-
-const CountWrapper = styled.div`
-    color: ${css.colors.WHITE};
-    font-size: 2em;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    height: 100%;
-`;
-
-const RunButton = styled.button`
-    border-radius: 2px;
-    background-color: ${css.colors.BLUE};
-    border-color: ${css.colors.BLUE};
-    padding: ${css.spacing.S200}px ${css.spacing.S400}px;
-    font-size: 1em;
-    color: ${css.colors.WHITE};
-    height: 50px;
+    justify-content: flex-end;
 `;
 
 export function Layout(props: {
     onFinishGame: (value: boolean) => void;
     setFunction: (value: string) => void;
+    setStats: (value: object) => void;
 }) {
-    const { onFinishGame, setFunction } = props;
+    const { onFinishGame, setFunction, setStats } = props;
     const [value, setValue] = React.useState('');
     const [levels, setLevels] = React.useState(null);
     const [currentLevel, setCurrentLevel] = React.useState(null);
     const [currentTests, setCurrentTests] = React.useState(null);
     const [countLevel, setCountLevel] = React.useState(0);
     const [currentResults, setCurrentResults] = React.useState([]);
-    const [isWinLevel, setIsWinLevel] = React.useState(false);
     const fetchData = useAPI();
 
     React.useEffect(() => {
@@ -107,26 +87,21 @@ export function Layout(props: {
     React.useEffect(() => {
         if (levels) {
             setCurrentLevel(levels[countLevel]);
-            setIsWinLevel(false);
             setFunction(value);
         }
     }, [levels, countLevel]);
 
     const onRunTests = () => {
-        if (currentResults) {
-            setCurrentResults([]);
-        }
-
         if (currentTests) {
             /**
              * DEV_HACK
              */
-            if (value === 'rendpasfou') {
-                setIsWinLevel(true);
+            if (value === 'rr') {
+                setCountLevel(countLevel + 1);
                 return;
             }
 
-            const fun = createFunction(value, currentLevel);
+            const fun = createFunction(value, currentLevel.name);
             const results = [];
 
             currentTests.tests.forEach(test => {
@@ -145,7 +120,11 @@ export function Layout(props: {
                 );
 
                 if (isWin) {
-                    setIsWinLevel(true);
+                    setStats({
+                        level: currentLevel.name,
+                        time: '00:00'
+                    });
+                    setCountLevel(countLevel + 1);
                 }
             }
         }
@@ -161,27 +140,27 @@ export function Layout(props: {
     }
 
     return (
-        <HotKeys keyName="cmd+e,ctrl+e" onKeyDown={onKeyDown}>
-            <Main>
-                <ActionsWrapper>
-                    <RunButton onClick={onRunTests}>Run (Cmd + e)</RunButton>
-                    {isWinLevel && (
-                        <RunButton
-                            onClick={() => setCountLevel(countLevel + 1)}
-                        >
-                            Next
-                        </RunButton>
-                    )}
-                    <CountWrapper>{countLevel + 1} / 5</CountWrapper>
-                    <TimerWrapper>
-                        <Timer>
-                            <Timer.Minutes formatValue={t => `${t} : `} />
-                            <Timer.Seconds
-                                formatValue={t => (t < 10 ? `0${t}` : `${t}`)}
-                            />
-                        </Timer>
-                    </TimerWrapper>
-                </ActionsWrapper>
+        <Main>
+            <ActionsWrapper>
+                <div>
+                    <button
+                        style={{ height: '45px' }}
+                        className="btn"
+                        onClick={onRunTests}
+                    >
+                        Run (Cmd + e)
+                    </button>
+                </div>
+                <TimerWrapper>
+                    <Timer>
+                        <Timer.Minutes formatValue={t => `${t} : `} />
+                        <Timer.Seconds
+                            formatValue={t => (t < 10 ? `0${t}` : `${t}`)}
+                        />
+                    </Timer>
+                </TimerWrapper>
+            </ActionsWrapper>
+            <HotKeys keyName="cmd+e,ctrl+e" onKeyDown={onKeyDown}>
                 <GameWrapper>
                     <Editor
                         level={currentLevel}
@@ -190,7 +169,7 @@ export function Layout(props: {
                     />
                     <Console values={currentResults} />
                 </GameWrapper>
-            </Main>
-        </HotKeys>
+            </HotKeys>
+        </Main>
     );
 }

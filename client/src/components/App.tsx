@@ -1,12 +1,25 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import '../styles/CTAButton.css';
 import Game from './Game';
 import { css } from './styleguide';
 
 const Main = styled.section`
-    padding: 2em;
+    padding: ${css.spacing.S300}px ${css.spacing.S700}px;
     margin: 0;
-    background: ${css.colors.DARK_BLUE};
+    background: #304352; /* fallback for old browsers */
+    background: #485563; /* fallback for old browsers */
+    background: -webkit-linear-gradient(
+        to left,
+        #29323c,
+        #485563
+    ); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(
+        to left,
+        #29323c,
+        #485563
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
     width: 100vw;
     height: 100vh;
     display: flex;
@@ -18,33 +31,32 @@ const Main = styled.section`
 const Header = styled.div`
     width: 80%;
     font-size: 2em;
-    color: ${css.colors.LIGHT_BLUE};
+    color: ${css.colors.LIGHT};
     text-align: center;
-`;
-
-const StartButton = styled.button`
-    border-radius: 2px;
-    background-color: ${css.colors.BLUE};
-    border-color: ${css.colors.BLUE};
-    padding: ${css.spacing.S200}px ${css.spacing.S400}px;
-    font-size: 1.5em;
-    color: ${css.colors.WHITE};
-    margin-top: ${css.spacing.S200}px;
+    margin-bottom: ${css.spacing.S200};
 `;
 
 export function App() {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [gameIsFinish, setGameFinish] = React.useState(false);
     const [functions, setFunctions] = React.useState([]);
+    const [stats, setStats] = React.useState([]);
 
     const onClick = () => {
-        console.log({ isPlaying: !isPlaying });
         setIsPlaying(!isPlaying);
     };
 
     const addFunction = (fun: string) => {
         setFunctions([...functions, fun]);
     };
+
+    const addNewStats = (value: object) => {
+        setStats([...stats, value]);
+    };
+
+    if (gameIsFinish) {
+        console.log({ stats });
+    }
 
     return (
         <Main>
@@ -56,11 +68,14 @@ export function App() {
             </Header>
             {!gameIsFinish ? (
                 !isPlaying ? (
-                    <StartButton onClick={onClick}>Let's go!</StartButton>
+                    <button onClick={onClick} className="btn">
+                        Let's go!
+                    </button>
                 ) : (
                     <Game
                         onFinishGame={setGameFinish}
                         setFunction={addFunction}
+                        setStats={addNewStats}
                     />
                 )
             ) : (
