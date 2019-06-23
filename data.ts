@@ -124,31 +124,6 @@ const TESTS: LevelTest[] = [
         tests: [
             {
                 value: 'hello',
-                expected: 'o'
-            },
-            {
-                value: ['d', true, 23],
-                expected: 23
-            },
-            {
-                value: 'Howdy',
-                expected: 'y'
-            },
-            {
-                value: ['a', 'a', 'a', 'b'],
-                expected: 'b'
-            },
-            {
-                value: 'good',
-                expected: 'd'
-            }
-        ]
-    },
-    {
-        id: LEVELS[4].id,
-        tests: [
-            {
-                value: 'hello',
                 expected: 'olleh'
             },
             {
@@ -166,6 +141,31 @@ const TESTS: LevelTest[] = [
             {
                 value: 25,
                 expected: false
+            }
+        ]
+    },
+    {
+        id: LEVELS[4].id,
+        tests: [
+            {
+                value: 'hello',
+                expected: 'o'
+            },
+            {
+                value: ['d', true, 23],
+                expected: 23
+            },
+            {
+                value: 'Howdy',
+                expected: 'y'
+            },
+            {
+                value: ['a', 'a', 'a', 'b'],
+                expected: 'b'
+            },
+            {
+                value: 'good',
+                expected: 'd'
             }
         ]
     }

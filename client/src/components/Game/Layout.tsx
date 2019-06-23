@@ -30,7 +30,7 @@ const ActionsWrapper = styled.div`
     align-items: center;
     width: 100%;
     padding: ${css.spacing.S200}px;
-    margin-bottom: ${css.spacing.S300}px;
+    margin-bottom: ${css.spacing.S100}px;
 `;
 
 const TimerWrapper = styled.div`
@@ -53,7 +53,7 @@ export function Layout(props: {
     const [levels, setLevels] = React.useState(null);
     const [currentLevel, setCurrentLevel] = React.useState(null);
     const [currentTests, setCurrentTests] = React.useState(null);
-    const [countLevel, setCountLevel] = React.useState(4);
+    const [countLevel, setCountLevel] = React.useState(0);
     const [currentResults, setCurrentResults] = React.useState([]);
     const fetchData = useAPI();
 

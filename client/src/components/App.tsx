@@ -7,7 +7,6 @@ import { css } from './styleguide';
 const Main = styled.section`
     padding: ${css.spacing.S300}px ${css.spacing.S700}px;
     margin: 0;
-    background: #304352; /* fallback for old browsers */
     background: #485563; /* fallback for old browsers */
     background: -webkit-linear-gradient(
         to left,
@@ -29,11 +28,34 @@ const Main = styled.section`
 `;
 
 const Header = styled.div`
-    width: 80%;
-    font-size: 2em;
-    color: ${css.colors.LIGHT};
+    color: ${css.colors.FLAME};
+    text-shadow: 1px 1px 2px black;
     text-align: center;
-    margin-bottom: ${css.spacing.S200};
+    margin-bottom: ${css.spacing.S200}px;
+    letter-spacing: 8px;
+    font-family: 'Bangers', 'Roboto', sans-serif;
+`;
+
+const FinalView = styled.div`
+    width: 100%;
+    height: 100%;
+    padding: ${css.spacing.S100}px;
+`;
+
+const LevelResume = styled.div`
+    margin: ${css.spacing.S200}px;
+    color: ${css.colors.LIGHT};
+`;
+
+const LevelResumeTitle = styled.h2`
+    color: ${css.colors.FLAME};
+    letter-spacing: 8px;
+    font-family: 'Roboto', sans-serif;
+    text-shadow: 1px 1px 2px black;
+`;
+
+const LevelResumeDetails = styled.div`
+    padding-left: ${css.spacing.S200}px;
 `;
 
 export function App() {
@@ -55,7 +77,13 @@ export function App() {
 
     return (
         <Main>
-            <Header>
+            <Header
+                style={
+                    isPlaying
+                        ? { width: '80%', fontSize: '2em' }
+                        : { width: '70%', fontSize: '2.5em' }
+                }
+            >
                 <h1>
                     You {gameIsFinish ? 'can' : "can't"} Javascript under
                     pressure
@@ -70,12 +98,18 @@ export function App() {
                     <Game onFinishGame={setGameFinish} setStats={addNewStats} />
                 )
             ) : (
-                <div>
-                    Congratulation, you can Javascript under pressure 👏🚀
-                    {functions.map(fun => (
-                        <p>{fun}</p>
+                <FinalView>
+                    👏👏👏 Congratulations 🚀
+                    {stats.map(stat => (
+                        <LevelResume>
+                            <LevelResumeTitle>{stat.level}</LevelResumeTitle>
+                            <LevelResumeDetails>
+                                <p>{stat.time}</p>
+                                <div>{stat.function}</div>
+                            </LevelResumeDetails>
+                        </LevelResume>
                     ))}
-                </div>
+                </FinalView>
             )}
         </Main>
     );
