@@ -7,17 +7,9 @@ import { css } from './styleguide';
 const Main = styled.section`
     padding: ${css.spacing.S300}px ${css.spacing.S700}px;
     margin: 0;
-    background: #485563; /* fallback for old browsers */
-    background: -webkit-linear-gradient(
-        to left,
-        #29323c,
-        #485563
-    ); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(
-        to left,
-        #29323c,
-        #485563
-    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #485563;
+    background: -webkit-linear-gradient(to left, #29323c, #485563);
+    background: linear-gradient(to left, #29323c, #485563);
 
     min-width: 100vw;
     height: 100vh;
@@ -118,7 +110,7 @@ export function App() {
             ) : (
                 <FinalView>
                     <ResumeTimer>
-                       {totalTime.m}:{totalTime.s}
+                        {totalTime.m}:{totalTime.s}
                     </ResumeTimer>
                     {stats.map(stat => (
                         <LevelResume>
