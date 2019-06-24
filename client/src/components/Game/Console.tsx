@@ -55,8 +55,7 @@ export function Console(props: { values: any[] }) {
 
     React.useEffect(() => {
         if (values.length > 0) {
-            const prevValues = allValues;
-            setAllValues([...values, ...prevValues]);
+            setAllValues([...values, ...allValues]);
         }
     }, [values]);
 

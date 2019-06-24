@@ -19,8 +19,9 @@ const Main = styled.section`
         #485563
     ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-    width: 100vw;
+    min-width: 100vw;
     height: 100vh;
+    overflow: scroll;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,14 +55,30 @@ const LevelResumeTitle = styled.h2`
     text-shadow: 1px 1px 2px black;
 `;
 
+const ResumeTimer = styled.div`
+    color: ${css.colors.LIGHT};
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    width: 100%;
+    font-size: 2.5em;
+`;
+
 const LevelResumeDetails = styled.div`
     padding-left: ${css.spacing.S200}px;
+`;
+
+const LevelResumeCodeBlock = styled.div`
+    padding: ${css.spacing.S200}px;
+    background-color: ${css.colors.SLATE_GRAY};
+    color: ${css.colors.LIGHT};
+    border-radius: 4px;
 `;
 
 export function App() {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [gameIsFinish, setGameFinish] = React.useState(false);
     const [stats, setStats] = React.useState([]);
+    const [totalTime, setTotalTime] = React.useState({});
 
     const onClick = () => {
         setIsPlaying(!isPlaying);
@@ -71,9 +88,11 @@ export function App() {
         setStats([...stats, value]);
     };
 
-    if (gameIsFinish) {
-        console.log({ stats });
-    }
+    const onFinishGame = (value: boolean, time: object) => {
+        setGameFinish(value);
+        setTotalTime(time);
+        console.log({ time });
+    };
 
     return (
         <Main>
@@ -95,17 +114,20 @@ export function App() {
                         Let's go!
                     </button>
                 ) : (
-                    <Game onFinishGame={setGameFinish} setStats={addNewStats} />
+                    <Game onFinishGame={onFinishGame} setStats={addNewStats} />
                 )
             ) : (
                 <FinalView>
-                    👏👏👏 Congratulations 🚀
+                    <ResumeTimer>
+                       {totalTime.m}:{totalTime.s}
+                    </ResumeTimer>
                     {stats.map(stat => (
                         <LevelResume>
                             <LevelResumeTitle>{stat.level}</LevelResumeTitle>
                             <LevelResumeDetails>
-                                <p>{stat.time}</p>
-                                <div>{stat.function}</div>
+                                <LevelResumeCodeBlock>
+                                    {stat.function}
+                                </LevelResumeCodeBlock>
                             </LevelResumeDetails>
                         </LevelResume>
                     ))}

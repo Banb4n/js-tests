@@ -39,7 +39,7 @@ const LEVELS: Level[] = [
     {
         id: 'level5',
         name: 'getLastItem',
-        description: '// i will be a string, an array. Return the last item.'
+        description: '// i will be a string or an array. Return the last item.'
     }
 ];
 

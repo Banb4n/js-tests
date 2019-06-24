@@ -5442,9 +5442,9 @@ react-ace@^7.0.2:
     prop-types "^15.7.2"
 
 react-compound-timer@^1.0.13:
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/react-compound-timer/-/react-compound-timer-1.0.13.tgz#c775fd936ba243ace4d586f8574e4e113fdf6c37"
-  integrity sha512-2/Rw8FeOtyc8BprdxLrEbBUvKDzwK+FhurcQnGxLZ7WA5sHiM9oN0FgAuU4rbZQieGF09TsXVeZ+MvhLieKOUw==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-compound-timer/-/react-compound-timer-1.1.1.tgz#4ef45d1c9ee356e0b33a3e7bca7d8884b2a77f6e"
+  integrity sha512-ZWdmUTn8HZkEv0gl+q0H18urwIlPDafOMhueS9I5PtNYUM0ykfeJO8aXREt1mw0xTkwx9WVemZHgRg4/nelAQQ==
   dependencies:
     react "^16.8.6"
 

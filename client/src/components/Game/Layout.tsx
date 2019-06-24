@@ -1,3 +1,4 @@
+import console = require('console');
 import * as React from 'react';
 import Timer from 'react-compound-timer';
 import HotKeys from 'react-hot-keys';
@@ -45,7 +46,7 @@ const TimerWrapper = styled.div`
 `;
 
 export function Layout(props: {
-    onFinishGame: (value: boolean) => void;
+    onFinishGame: (value: boolean, time: object) => void;
     setStats: (value: object) => void;
 }) {
     const { onFinishGame, setStats } = props;
@@ -56,6 +57,7 @@ export function Layout(props: {
     const [countLevel, setCountLevel] = React.useState(0);
     const [currentResults, setCurrentResults] = React.useState([]);
     const fetchData = useAPI();
+    const timer = React.useRef();
 
     React.useEffect(() => {
         async function fetchLevels() {
@@ -79,7 +81,7 @@ export function Layout(props: {
 
     React.useEffect(() => {
         if (levels && countLevel + 1 > levels.length) {
-            onFinishGame(true);
+            onFinishGame(true, timer.current.state);
         }
     }, [countLevel]);
 
@@ -98,7 +100,6 @@ export function Layout(props: {
                 setCountLevel(countLevel + 1);
                 return;
             }
-
             const fun = createFunction(value, currentLevel.name);
             const results = [];
 
@@ -108,9 +109,8 @@ export function Layout(props: {
                     expected: test.expected,
                     result: fun(test.value)
                 });
-                setCurrentResults(results);
-                return;
             });
+            setCurrentResults(results);
 
             if (results.length > 0) {
                 const isWin = results.every(
@@ -127,11 +127,6 @@ export function Layout(props: {
                 }
             }
         }
-    };
-
-    const onKeyDown = (keyName, e, handle) => {
-        console.log('test:onKeyDown', { keyName, e, handle });
-        onRunTests();
     };
 
     if (!currentLevel || !currentTests) {
@@ -151,7 +146,7 @@ export function Layout(props: {
                     </button>
                 </div>
                 <TimerWrapper>
-                    <Timer>
+                    <Timer ref={timer}>
                         <Timer.Minutes formatValue={t => `${t} : `} />
                         <Timer.Seconds
                             formatValue={t => (t < 10 ? `0${t}` : `${t}`)}
@@ -159,7 +154,7 @@ export function Layout(props: {
                     </Timer>
                 </TimerWrapper>
             </ActionsWrapper>
-            <HotKeys keyName="cmd+e,ctrl+e" onKeyDown={onKeyDown}>
+            <HotKeys keyName="cmd+e,ctrl+e" onKeyDown={() => onRunTests()}>
                 <GameWrapper>
                     <Editor
                         level={currentLevel}
