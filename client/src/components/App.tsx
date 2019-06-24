@@ -91,7 +91,6 @@ export function App() {
     const onFinishGame = (value: boolean, time: object) => {
         setGameFinish(value);
         setTotalTime(time);
-        console.log({ time });
     };
 
     return (

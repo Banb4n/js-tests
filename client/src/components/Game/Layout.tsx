@@ -1,4 +1,3 @@
-import console = require('console');
 import * as React from 'react';
 import Timer from 'react-compound-timer';
 import HotKeys from 'react-hot-keys';
